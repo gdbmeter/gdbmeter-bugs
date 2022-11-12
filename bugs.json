@@ -1,0 +1,267 @@
+[
+  {
+    "date": "11.04.2022",
+    "dbms": "Neo4j",
+    "status": "open",
+    "test": [
+      "CREATE ({prop: duration('P1754475719991321997M')})"
+    ],
+    "title": "Unit-based duration format behaviour differs from documentation"
+  },
+  {
+    "date": "17.04.2022",
+    "dbms": "Neo4j",
+    "status": "closed (not a bug)",
+    "test": [
+      "CREATE ({ p: \"\" =~ \"\\\" })"
+    ],
+    "title": "Regex throws an unexpected internal error"
+  },
+  {
+    "date": "21.04.2022",
+    "dbms": "Neo4j",
+    "status": "open (work in progress)",
+    "test": [
+      "CREATE ({property: left(\"OD\",3708444074355087135)})"
+    ],
+    "title": "Left function throws IndexOutOfBounds exception",
+    "comment": "The behaviour deviates from the documentation and the implementation will be changed accordingly."
+  },
+  {
+    "date": "02.05.2022",
+    "dbms": "Neo4j",
+    "status": "fixed",
+    "test": [
+      "MATCH (n:L) WHERE (n.a AND (NOT ((n.a OR n.a) AND false))) XOR n.a RETURN n"
+    ],
+    "title": "QueryExecutionException in query planner",
+    "comment": "This bug persisted in different forms over a longer period of time. A previous attempt tried to fix this bug but our tool found a way to trigger it again."
+  },
+  {
+    "date": "25.04.2022",
+    "dbms": "Neo4j",
+    "status": "closed (not a bug)",
+    "test": [
+      "RETURN 1/0"
+    ],
+    "title": "Exception is thrown with null message",
+    "comment": "Java optimizes away the error message making it become null."
+  },
+  {
+    "date": "04.05.2022",
+    "dbms": "Neo4j",
+    "status": "fixed",
+    "test": [
+      "CREATE TEXT INDEX FOR (n:L) ON (n.p)",
+      "CREATE INDEX IF NOT EXISTS FOR (n:L) ON (n.p)",
+      "CREATE (:L {p: \"test\"})",
+      "MATCH (n:L) WHERE (n.p =~ \"\") XOR (n.p ENDS WITH \"\") RETURN n"
+    ],
+    "title": "UnsupportedOperationException: TEXT index has no value capability",
+    "comment": "Two indices of different types on the same property trigger a bug when using regex comparisons."
+  },
+  {
+    "date": "02.05.2022",
+    "dbms": "Neo4j",
+    "status": "open",
+    "test": [
+      "CREATE (:Q {p:false}), (:Q {p:false}), (:Q {p:true}), (:Q {p:false})",
+      "MATCH (n:Q) WHERE NOT ((n.p OR (\"a\"=\"\")) XOR n.p) DELETE n"
+    ],
+    "title": "Deletion of nodes throws QueryExecutionException"
+  },
+  {
+    "date": "01.05.2022",
+    "dbms": "Neo4j",
+    "status": "fixed",
+    "test": [
+      "MATCH (n:Person) WHERE ((n.a = n.a) OR n.b) XOR (n.b) RETURN n"
+    ],
+    "title": "MATCH query throws InternalException",
+    "comment": "This is a known issue that peristed over many versions and has been adressed in the newst version."
+  },
+  {
+    "date": "05.05.2022",
+    "dbms": "Neo4j",
+    "status": "fixed",
+    "test": [
+      "MATCH (n:S) WHERE NOT((((NOT(toBooleanOrNull(0.8)))) XOR (toUpper(\"\") CONTAINS right(\"\",3))) AND (((\"\" CONTAINS \"\") XOR NOT(false)) XOR (n.aF <> n.aF) XOR true)) RETURN n"
+    ],
+    "title": "IllegalArgumentException: Comparison method violates its general contract",
+    "comment": "Complicated conditions on a query cause an illegal precondition in the sorting library."
+  },
+  {
+    "date": "05.05.2022",
+    "dbms": "Neo4j",
+    "status": "fixed",
+    "test": [
+      "MATCH (n:L) WHERE n.a OR (((\"\"=~\"\") AND NOT(true)) >= n.a) RETURN n"
+    ],
+    "title": "IllegalStateException: Did not find any type information for expression"
+  },
+  {
+    "date": "06.05.2022",
+    "dbms": "Neo4j",
+    "status": "fixed",
+    "test": [
+      "MATCH (n:L) WHERE n.p = (n.p = n.p) RETURN n"
+    ],
+    "title": "StackOverflowError when running MATCH query",
+    "comment": "This bug causes a stack overflow error and crashes the database entirely. The bug was located in the semantic checking and has been backported to all affected versions."
+  },
+  {
+    "date": "09.05.2022",
+    "dbms": "Neo4j",
+    "status": "fixed",
+    "test": [
+      "RETURN (0.0/0.0), 0.0 < (0.0/0.0), NOT(0.0 < (0.0/0.0))"
+    ],
+    "title": "NOT operator on NaN value is optimized away",
+    "comment": "Neo4j incorrectly replaces a NOT(x < y) with x >= y although this transformation is not valid when comparing values to NaN."
+  },
+  {
+    "date": "09.05.2022",
+    "dbms": "Neo4j",
+    "status": "closed (won't fix)",
+    "test": [
+      "CREATE INDEX FOR (n:L) ON (n.p)",
+      "CREATE (n:L {p:duration('P362644645M294180573WT737771470M')})",
+      "MATCH (n:L) WHERE n.p > duration(\"P-1157M-10DT0S\") RETURN COUNT(*)"
+    ],
+    "title": "MATCH query returns incorrect result set when an index is present",
+    "comment": "The addition of the index changes the result of the last query."
+  },
+  {
+    "date": "12.05.2022",
+    "dbms": "Neo4j",
+    "status": "open",
+    "test": [
+      "CREATE (:L {p:\"test\"})",
+      "MATCH (n:L) WHERE n.p STARTS WITH lTrim(n.p) RETURN COUNT(n)",
+      "CREATE INDEX FOR (n:L) ON (n.p)",
+      "MATCH (n:L) WHERE n.p STARTS WITH lTrim(n.p) RETURN COUNT(n)"
+    ],
+    "title": "MATCH query returns incorrect result set when an index is created",
+    "comment": "The addition of the index changes the result of the query."
+  },
+  {
+    "date": "24.05.2022",
+    "dbms": "Neo4j",
+    "status": "fixed (duplicate)",
+    "test": [
+      "MATCH (n:L) WHERE n.p XOR (false XOR n.p OR null) RETURN n"
+    ],
+    "title": "QueryExecutionException in query planner"
+  },
+  {
+    "date": "30.05.2022",
+    "dbms": "RedisGraph",
+    "status": "fixed",
+    "test": [
+      "GRAPH.QUERY db 'RETURN substring(\"\",502175305738373637,-5325522081583679899)'"
+    ],
+    "title": "Query crashes server (OUT OF MEMORY)",
+    "comment": "Due to an invalid query, RedisGraph tries to allocate too much memory which crashes the database server."
+  },
+  {
+    "date": "30.05.2022",
+    "dbms": "RedisGraph",
+    "status": "fixed",
+    "test": [
+      "GRAPH.QUERY db 'RETURN right(\"\", -1605392245097051328)'"
+    ],
+    "title": "Query crashes server",
+    "comment": "Due to an invalid query, RedisGraph tries to access invalid memory which crashes the database server."
+  },
+  {
+    "date": "31.05.2022",
+    "dbms": "RedisGraph",
+    "status": "fixed",
+    "test": [
+      "GRAPH.QUERY db 'RETURN toInteger(\"\")'"
+    ],
+    "title": "toInteger returns 0 instead of null"
+  },
+  {
+    "date": "31.05.2022",
+    "dbms": "Jedis",
+    "status": "fixed",
+    "test": [
+      "RETURN 10^100000"
+    ],
+    "title": "NumberFormatException thrown when executing graph query that returns infinity",
+    "comment": "The Redis driver for the Java language did not handle an edge case of double values correctly."
+  },
+  {
+    "date": "31.05.2022",
+    "dbms": "RedisGraph",
+    "status": "fixed",
+    "test": [
+      "GRAPH.QUERY db 'RETURN toInteger(1.2289948315394e+19) % -1'"
+    ],
+    "title": "Query using modulo operator crashes server",
+    "comment": "A known bug of gcc that did go unnoticed for the developers of RedisGraph caused this particular bug. See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55885 and https://gcc.gnu.org/bugzilla/show_bug.cgi?id=30484"
+  },
+  {
+    "date": "02.06.2022",
+    "dbms": "RedisGraph",
+    "status": "fixed",
+    "test": [
+      "GRAPH.QUERY db 'RETURN left(null, null)'",
+      "GRAPH.QUERY db 'RETURN left(\"\", -212)'"
+    ],
+    "title": "Left / right function do not check preconditions",
+    "comment": "The first query returns an incorrect error message and the second query reads arbitrary memory."
+  },
+  {
+    "date": "03.06.2022",
+    "dbms": "RedisGraph",
+    "status": "fixed",
+    "test": [
+      "GRAPH.QUERY db 'RETURN 10 >= null'"
+    ],
+    "title": "Null not supported in comparisons"
+  },
+  {
+    "date": "06.06.2022",
+    "dbms": "RedisGraph",
+    "status": "fixed",
+    "test": [
+      "GRAPH.QUERY db 'RETURN toJSON(point({ longitude: 167.697555, latitude: 0.402313 }))'"
+    ],
+    "title": "toJSON does not support points"
+  },
+  {
+    "date": "07.06.2022",
+    "dbms": "RedisGraph",
+    "status": "fixed",
+    "test": [
+      "GRAPH.QUERY db 'CREATE INDEX FOR (n:b) ON (n.D)'",
+      "GRAPH.QUERY db 'MATCH (n:b) WHERE 0 < distance(point({ longitude: 4, latitude: 4 }), n.D) RETURN n'"
+    ],
+    "title": "Using distance function on a property with index crashes server",
+    "comment": "A distance query crashed the server whenever an index was present."
+  },
+  {
+    "date": "08.06.2022",
+    "dbms": "RedisGraph",
+    "status": "fixed",
+    "test": [
+      "GRAPH.QUERY db 'CREATE INDEX FOR (n:L) ON (n.a)'",
+      "GRAPH.QUERY db 'MATCH (n:L) WHERE n.a = toInteger(\"a\") RETURN n'"
+    ],
+    "title": "Crash when searching an index for a value when the value is determined at runtime",
+    "comment": "Calling toInteger on a string when an index is present causes a crash."
+  },
+  {
+    "date": "10.06.2022",
+    "dbms": "RedisGraph",
+    "status": "fixed",
+    "test": [
+      "CREATE (a:L {}), (n:L {}), (n)-[:T {}]->(a)",
+      "CREATE INDEX FOR ()-[n:T]-() ON (n.p)"
+    ],
+    "title": "Server crashes when freeing index",
+    "comment": "Running the queries multiple times causes the server to eventually crash. This was due to a timing bug when acquiring a lock in a multi threaded environment."
+  }
+]
