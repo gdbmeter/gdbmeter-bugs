@@ -117,16 +117,17 @@ def export_database():
             TRIGGER_BUG_LINE, SEVERITY, URL_EMAIL, URL_BUGTRACKER, URL_FIX,
             REPORTER)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                       (bug_entry['dbms'], bug_entry['oracle'],
+                       (bug_entry['dbms'],
+                        "Unknown",
                         bug_entry['status'],
                         bug_entry['date'],
                         '\n'.join(bug_entry['test']),
-                        bug_entry['test'][-1],
+                        "empty" if len(bug_entry["test"]) == 0 else bug_entry['test'][-1],
                         severity,
                         links.get('email', None),
                         links.get('bugtracker', None),
                         links.get('fix', None),
-                        bug_entry['reporter']))
+                        "Reporter"))
         rid = cursor.execute('select last_insert_rowid();').fetchall()[0][0]
         seq = 0
         for statement in bug_entry['test']:
