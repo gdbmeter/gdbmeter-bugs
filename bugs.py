@@ -27,7 +27,7 @@ def check():
     schema = {
         "type": "array",
         "items": {
-            "required": ["date", "dbms", "oracle", "status", "test", "title", "link", "type"],
+            "required": ["date", "dbms", "status", "test", "title", "link", "type"],
             "properties": {
                 "date": {"type": "string"},
                 "dbms": {
@@ -35,9 +35,6 @@ def check():
                     "pattern": r"^(Neo4j|RedisGraph|Jedis|JanusGraph)$",
                 },
                 "link": {"type": "string"},
-                "oracle": {
-                    "type": "string",
-                },
                 "status": {
                     "type": "string",
                     # verified means that it's a bug but it hasn't been closed yet!

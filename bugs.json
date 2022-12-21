@@ -2,55 +2,66 @@
     {
         "date": "11.04.2022",
         "dbms": "Neo4j",
-        "status": "open",
+        "link": "https://github.com/neo4j/neo4j/issues/12861",
+        "status": "verified",
         "test": [
             "CREATE ({prop: duration('P1754475719991321997M')})"
         ],
-        "title": "Unit-based duration format behaviour differs from documentation"
+        "title": "Unit-based duration format behaviour differs from documentation",
+        "type": "error"
     },
     {
         "date": "17.04.2022",
         "dbms": "Neo4j",
+        "link": "https://github.com/neo4j/neo4j/issues/12866",
         "status": "closed (not a bug)",
         "test": [
             "CREATE ({ p: \"\" =~ \"\\\" })"
         ],
-        "title": "Regex throws an unexpected internal error"
+        "title": "Regex throws an unexpected internal error",
+        "type": "error"
     },
     {
         "comment": "The behaviour deviates from the documentation and the implementation will be changed accordingly.",
         "date": "21.04.2022",
         "dbms": "Neo4j",
-        "status": "open (work in progress)",
+        "link": "https://github.com/neo4j/neo4j/issues/12869",
+        "status": "fixed",
         "test": [
             "CREATE ({property: left(\"OD\",3708444074355087135)})"
         ],
-        "title": "Left function throws IndexOutOfBounds exception"
+        "title": "Left function throws IndexOutOfBounds exception",
+        "type": "error"
     },
     {
         "comment": "This bug persisted in different forms over a longer period of time. A previous attempt tried to fix this bug but our tool found a way to trigger it again.",
         "date": "02.05.2022",
         "dbms": "Neo4j",
+        "link": "https://github.com/neo4j/neo4j/issues/12877",
         "status": "fixed",
         "test": [
             "MATCH (n:L) WHERE (n.a AND (NOT ((n.a OR n.a) AND false))) XOR n.a RETURN n"
         ],
-        "title": "QueryExecutionException in query planner"
+        "title": "QueryExecutionException in query planner",
+        "type": "error"
     },
     {
         "comment": "Java optimizes away the error message making it become null.",
         "date": "25.04.2022",
         "dbms": "Neo4j",
+        "link": "https://github.com/neo4j/neo4j/issues/12874",
         "status": "closed (not a bug)",
         "test": [
             "RETURN 1/0"
         ],
-        "title": "Exception is thrown with null message"
+        "title": "Exception is thrown with null message",
+        "type": "error"
     },
     {
         "comment": "Two indices of different types on the same property trigger a bug when using regex comparisons.",
         "date": "04.05.2022",
         "dbms": "Neo4j",
+        "link": "https://github.com/neo4j/neo4j/issues/12879",
         "status": "fixed",
         "test": [
             "CREATE TEXT INDEX FOR (n:L) ON (n.p)",
@@ -58,210 +69,454 @@
             "CREATE (:L {p: \"test\"})",
             "MATCH (n:L) WHERE (n.p =~ \"\") XOR (n.p ENDS WITH \"\") RETURN n"
         ],
-        "title": "UnsupportedOperationException: TEXT index has no value capability"
+        "title": "UnsupportedOperationException: TEXT index has no value capability",
+        "type": "error"
     },
     {
         "date": "02.05.2022",
         "dbms": "Neo4j",
-        "status": "open",
+        "link": "https://github.com/neo4j/neo4j/issues/12878",
+        "status": "fixed",
         "test": [
             "CREATE (:Q {p:false}), (:Q {p:false}), (:Q {p:true}), (:Q {p:false})",
             "MATCH (n:Q) WHERE NOT ((n.p OR (\"a\"=\"\")) XOR n.p) DELETE n"
         ],
-        "title": "Deletion of nodes throws QueryExecutionException"
+        "title": "Deletion of nodes throws QueryExecutionException",
+        "type": "error"
     },
     {
         "comment": "This is a known issue that peristed over many versions and has been adressed in the newst version.",
         "date": "01.05.2022",
         "dbms": "Neo4j",
-        "status": "fixed",
+        "link": "https://github.com/neo4j/neo4j/issues/12876",
+        "status": "closed (duplicate)",
         "test": [
             "MATCH (n:Person) WHERE ((n.a = n.a) OR n.b) XOR (n.b) RETURN n"
         ],
-        "title": "MATCH query throws InternalException"
+        "title": "MATCH query throws InternalException",
+        "type": "error"
     },
     {
         "comment": "Complicated conditions on a query cause an illegal precondition in the sorting library.",
         "date": "05.05.2022",
         "dbms": "Neo4j",
+        "link": "https://github.com/neo4j/neo4j/issues/12880",
         "status": "fixed",
         "test": [
             "MATCH (n:S) WHERE NOT((((NOT(toBooleanOrNull(0.8)))) XOR (toUpper(\"\") CONTAINS right(\"\",3))) AND (((\"\" CONTAINS \"\") XOR NOT(false)) XOR (n.aF <> n.aF) XOR true)) RETURN n"
         ],
-        "title": "IllegalArgumentException: Comparison method violates its general contract"
+        "title": "IllegalArgumentException: Comparison method violates its general contract",
+        "type": "error"
     },
     {
         "date": "05.05.2022",
         "dbms": "Neo4j",
+        "link": "https://github.com/neo4j/neo4j/issues/12881",
         "status": "fixed",
         "test": [
             "MATCH (n:L) WHERE n.a OR (((\"\"=~\"\") AND NOT(true)) >= n.a) RETURN n"
         ],
-        "title": "IllegalStateException: Did not find any type information for expression"
+        "title": "IllegalStateException: Did not find any type information for expression",
+        "type": "error"
     },
     {
         "comment": "This bug causes a stack overflow error and crashes the database entirely. The bug was located in the semantic checking and has been backported to all affected versions.",
         "date": "06.05.2022",
         "dbms": "Neo4j",
+        "link": "https://github.com/neo4j/neo4j/issues/12882",
         "status": "fixed",
         "test": [
             "MATCH (n:L) WHERE n.p = (n.p = n.p) RETURN n"
         ],
-        "title": "StackOverflowError when running MATCH query"
+        "title": "StackOverflowError when running MATCH query",
+        "type": "crash"
     },
     {
         "comment": "Neo4j incorrectly replaces a NOT(x < y) with x >= y although this transformation is not valid when comparing values to NaN.",
         "date": "09.05.2022",
         "dbms": "Neo4j",
+        "link": "https://github.com/neo4j/neo4j/issues/12883",
         "status": "fixed",
         "test": [
             "RETURN (0.0/0.0), 0.0 < (0.0/0.0), NOT(0.0 < (0.0/0.0))"
         ],
-        "title": "NOT operator on NaN value is optimized away"
+        "title": "NOT operator on NaN value is optimized away",
+        "type": "logic"
     },
     {
         "comment": "The addition of the index changes the result of the last query.",
         "date": "09.05.2022",
         "dbms": "Neo4j",
-        "status": "closed (won't fix)",
+        "link": "https://github.com/neo4j/neo4j/issues/12884",
+        "status": "verified",
         "test": [
             "CREATE INDEX FOR (n:L) ON (n.p)",
             "CREATE (n:L {p:duration('P362644645M294180573WT737771470M')})",
             "MATCH (n:L) WHERE n.p > duration(\"P-1157M-10DT0S\") RETURN COUNT(*)"
         ],
-        "title": "MATCH query returns incorrect result set when an index is present"
+        "title": "MATCH query returns incorrect result set when an index is present",
+        "type": "logic"
     },
     {
         "comment": "The addition of the index changes the result of the query.",
         "date": "12.05.2022",
         "dbms": "Neo4j",
-        "status": "open",
+        "link": "https://github.com/neo4j/neo4j/issues/12887",
+        "status": "fixed",
         "test": [
             "CREATE (:L {p:\"test\"})",
             "MATCH (n:L) WHERE n.p STARTS WITH lTrim(n.p) RETURN COUNT(n)",
             "CREATE INDEX FOR (n:L) ON (n.p)",
             "MATCH (n:L) WHERE n.p STARTS WITH lTrim(n.p) RETURN COUNT(n)"
         ],
-        "title": "MATCH query returns incorrect result set when an index is created"
+        "title": "MATCH query returns incorrect result set when an index is created",
+        "type": "logic"
     },
     {
         "date": "24.05.2022",
         "dbms": "Neo4j",
-        "status": "fixed (duplicate)",
+        "link": "https://github.com/neo4j/neo4j/issues/12889",
+        "status": "closed (duplicate)",
         "test": [
             "MATCH (n:L) WHERE n.p XOR (false XOR n.p OR null) RETURN n"
         ],
-        "title": "QueryExecutionException in query planner"
+        "title": "QueryExecutionException in query planner",
+        "type": "logic"
     },
     {
         "comment": "Due to an invalid query, RedisGraph tries to allocate too much memory which crashes the database server.",
         "date": "30.05.2022",
         "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2374",
         "status": "fixed",
         "test": [
             "GRAPH.QUERY db 'RETURN substring(\"\",502175305738373637,-5325522081583679899)'"
         ],
-        "title": "Query crashes server (OUT OF MEMORY)"
+        "title": "Query crashes server (OUT OF MEMORY)",
+        "type": "crash"
     },
     {
         "comment": "Due to an invalid query, RedisGraph tries to access invalid memory which crashes the database server.",
         "date": "30.05.2022",
         "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2375",
         "status": "fixed",
         "test": [
             "GRAPH.QUERY db 'RETURN right(\"\", -1605392245097051328)'"
         ],
-        "title": "Query crashes server"
+        "title": "Query crashes server",
+        "type": "crash"
     },
     {
         "date": "31.05.2022",
         "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2376",
         "status": "fixed",
         "test": [
             "GRAPH.QUERY db 'RETURN toInteger(\"\")'"
         ],
-        "title": "toInteger returns 0 instead of null"
+        "title": "toInteger returns 0 instead of null",
+        "type": "logic"
     },
     {
         "comment": "The Redis driver for the Java language did not handle an edge case of double values correctly.",
         "date": "31.05.2022",
         "dbms": "Jedis",
+        "link": "https://github.com/redis/jedis/issues/3010",
         "status": "fixed",
         "test": [
             "RETURN 10^100000"
         ],
-        "title": "NumberFormatException thrown when executing graph query that returns infinity"
+        "title": "NumberFormatException thrown when executing graph query that returns infinity",
+        "type": "client"
     },
     {
         "comment": "A known bug of gcc that did go unnoticed for the developers of RedisGraph caused this particular bug. See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55885 and https://gcc.gnu.org/bugzilla/show_bug.cgi?id=30484",
         "date": "31.05.2022",
         "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2377",
         "status": "fixed",
         "test": [
             "GRAPH.QUERY db 'RETURN toInteger(1.2289948315394e+19) % -1'"
         ],
-        "title": "Query using modulo operator crashes server"
+        "title": "Query using modulo operator crashes server",
+        "type": "crash"
     },
     {
         "comment": "The first query returns an incorrect error message and the second query reads arbitrary memory.",
         "date": "02.06.2022",
         "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2382",
         "status": "fixed",
         "test": [
             "GRAPH.QUERY db 'RETURN left(null, null)'",
             "GRAPH.QUERY db 'RETURN left(\"\", -212)'"
         ],
-        "title": "Left / right function do not check preconditions"
+        "title": "Left / right function do not check preconditions",
+        "type": "logic"
     },
     {
         "date": "03.06.2022",
         "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2383",
         "status": "fixed",
         "test": [
             "GRAPH.QUERY db 'RETURN 10 >= null'"
         ],
-        "title": "Null not supported in comparisons"
+        "title": "Null not supported in comparisons",
+        "type": "error"
     },
     {
         "date": "06.06.2022",
         "dbms": "RedisGraph",
-        "status": "fixed",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2387",
+        "status": "fixed (in documentation)",
         "test": [
             "GRAPH.QUERY db 'RETURN toJSON(point({ longitude: 167.697555, latitude: 0.402313 }))'"
         ],
-        "title": "toJSON does not support points"
+        "title": "toJSON does not support points",
+        "type": "error"
     },
     {
         "comment": "A distance query crashed the server whenever an index was present.",
         "date": "07.06.2022",
         "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2390",
         "status": "fixed",
         "test": [
             "GRAPH.QUERY db 'CREATE INDEX FOR (n:b) ON (n.D)'",
             "GRAPH.QUERY db 'MATCH (n:b) WHERE 0 < distance(point({ longitude: 4, latitude: 4 }), n.D) RETURN n'"
         ],
-        "title": "Using distance function on a property with index crashes server"
+        "title": "Using distance function on a property with index crashes server",
+        "type": "crash"
     },
     {
         "comment": "Calling toInteger on a string when an index is present causes a crash.",
         "date": "08.06.2022",
         "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2393",
         "status": "fixed",
         "test": [
             "GRAPH.QUERY db 'CREATE INDEX FOR (n:L) ON (n.a)'",
             "GRAPH.QUERY db 'MATCH (n:L) WHERE n.a = toInteger(\"a\") RETURN n'"
         ],
-        "title": "Crash when searching an index for a value when the value is determined at runtime"
+        "title": "Crash when searching an index for a value when the value is determined at runtime",
+        "type": "crash"
     },
     {
         "comment": "Running the queries multiple times causes the server to eventually crash. This was due to a timing bug when acquiring a lock in a multi threaded environment.",
         "date": "10.06.2022",
         "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2394",
         "status": "fixed",
         "test": [
             "CREATE (a:L {}), (n:L {}), (n)-[:T {}]->(a)",
             "CREATE INDEX FOR ()-[n:T]-() ON (n.p)"
         ],
-        "title": "Server crashes when freeing index"
+        "title": "Server crashes when freeing index",
+        "type": "crash"
+    },
+    {
+        "comment": "Calling the substring function with a large third parameter allocates a lot of memory which forces the server to crash.",
+        "date": "13.06.2022",
+        "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2406",
+        "status": "fixed",
+        "test": [
+            "RETURN substring(\"a\" + \"b\", 1, 999999999999999999999999999999999999999999999)"
+        ],
+        "title": "Calling substring with large length crashes the server",
+        "type": "crash"
+    },
+    {
+        "date": "13.06.2022",
+        "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2407",
+        "status": "fixed",
+        "test": [
+            "RETURN '' + 1.123456e+300 + 1.123456e+300"
+        ],
+        "title": "Server crashes on OpBase_Consume",
+        "type": "crash"
+    },
+    {
+        "date": "14.06.2022",
+        "dbms": "Neo4j",
+        "link": "https://github.com/neo4j/neo4j/issues/12896",
+        "status": "verified",
+        "test": [
+            "RETURN sqrt(-9018766185607338000.0)"
+        ],
+        "title": "sqrt of negative number is NaN",
+        "type": "logic"
+    },
+    {
+        "date": "17.06.2022",
+        "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2417",
+        "status": "verified",
+        "test": [
+            "CREATE (:L {p: 0.08294463157653809})",
+            "MATCH (n:L) RETURN n.p"
+        ],
+        "title": "Floating point numbers truncated",
+        "type": "logic"
+    },
+    {
+        "comment": "A bug that occurred in order by clauses. The developers decided to change their sorting algorithm because of this bug.",
+        "date": "21.06.2022",
+        "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2424",
+        "status": "fixed",
+        "test": [
+            "CREATE (:L {m:7518529121104228127})",
+            "CREATE (:L {m:973534261302138660}),",
+            "CREATE (:L {m:7518529121104228127})",
+            "CREATE (:L {m:973534261302138660})",
+            "CREATE (:L {m:-3094839435357647266})",
+            "CREATE (:L {a:624014191080025169, m:-36713081251936641791616188957439570013717933290926389760})",
+            "CREATE (:L {m:5447997858573538122})",
+            "CREATE (:L {m:5447997858573538122})",
+            "MATCH (n:L) SET n.a = NULL RETURN n.a ORDER BY n.m DESC"
+        ],
+        "title": "Server crashes in Record_Get",
+        "type": "crash"
+    },
+    {
+        "comment": "Negative distances make the redis server hang. This bug is part of multiple projects. In particular, the RedisSearch project which is the indexing backend of RedisGraph.",
+        "date": "27.06.2022",
+        "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2433",
+        "status": "verified",
+        "test": [
+            "CREATE INDEX FOR (n:L) ON (n.p)",
+            "MATCH (n:L) WHERE distance(point({ longitude: 8.076489, latitude: -58.167002 }), n.p) <= -(round(0.7784249186515808)) RETURN n"
+        ],
+        "title": "MATCH query makes the server hang indefinitely",
+        "type": "hang"
+    },
+    {
+        "date": "28.06.2022",
+        "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2434",
+        "status": "verified",
+        "test": [
+            "CREATE INDEX FOR (n:L) ON (n.p)",
+            "CREATE (:L { p:\"\" })",
+            "MATCH (n:L) RETURN \"a\" > n.p",
+            "MATCH (n:L) WHERE \"a\" > n.p RETURN COUNT(n)"
+        ],
+        "title": "Node missing from the result set when an index is present",
+        "type": "logic"
+    },
+    {
+        "date": "28.06.2022",
+        "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2435",
+        "status": "fixed",
+        "test": [
+            "RETURN 0.0/0.0 = 10",
+            "RETURN 0.0/0.0 <> 10",
+            "RETURN 0.0/0.0 <= 10",
+            "RETURN 0.0/0.0 >= 10"
+        ],
+        "title": "Incorrect result when comparing to NaN value",
+        "type": "logic"
+    },
+    {
+        "date": "28.06.2022",
+        "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2436",
+        "status": "fixed",
+        "test": [
+            "RETURN sqrt(-10)"
+        ],
+        "title": "Sqrt of negative numbers",
+        "type": "logic"
+    },
+    {
+        "date": "28.06.2022",
+        "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2440",
+        "status": "verified",
+        "test": [
+            "RETURN floor(99)"
+        ],
+        "title": "Floor & Ceil return integers instead of doubles",
+        "type": "logic"
+    },
+    {
+        "date": "18.07.2022",
+        "dbms": "JanusGraph",
+        "link": "https://github.com/JanusGraph/janusgraph/issues/3146",
+        "status": "open",
+        "test": [],
+        "title": "Lucene index inconsistency",
+        "type": "error"
+    },
+    {
+        "date": "20.07.2022",
+        "dbms": "Neo4j",
+        "link": "https://github.com/neo4j/neo4j/issues/12911",
+        "status": "fixed",
+        "test": [
+            "MATCH (n:L) WHERE NOT(((NOT(toBoolean(true))) AND NOT(isEmpty(n.p))) XOR (isEmpty(n.p))) RETURN *"
+        ],
+        "title": "IllegalStateException whilst planning distinct union",
+        "type": "error"
+    },
+    {
+        "date": "26.07.2022",
+        "dbms": "JanusGraph",
+        "link": "https://github.com/JanusGraph/janusgraph/issues/3154",
+        "status": "open",
+        "test": [],
+        "title": "Lucene index long overflow",
+        "type": "error"
+    },
+    {
+        "date": "26.07.2022",
+        "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2497",
+        "status": "fixed",
+        "test": [
+            "CREATE (:L)",
+            "RETURN (null <> false) XOR true",
+            "MATCH (n:L) WHERE (null <> false) XOR true RETURN COUNT(n)"
+        ],
+        "title": "Query with where condition equal to null returns incorrect result",
+        "type": "logic"
+    },
+    {
+        "date": "26.07.2022",
+        "dbms": "RedisGraph",
+        "link": "https://github.com/RedisGraph/RedisGraph/issues/2498",
+        "status": "verified",
+        "test": [
+            "CREATE INDEX FOR (n:L) ON (n.t)",
+            "CREATE (:L {t:\"\"})",
+            "MATCH (n:L) RETURN n.t < \"*fo\"",
+            "MATCH (n:L) WHERE n.t < \"*fo\" RETURN COUNT(n)"
+        ],
+        "title": "Query returns incorrect result when index is present",
+        "type": "logic"
+    },
+    {
+        "date": "04.08.2022",
+        "dbms": "JanusGraph",
+        "link": "https://github.com/JanusGraph/janusgraph/issues/3164",
+        "status": "fixed",
+        "test": [],
+        "title": "Incorrect result for query that filters on unset property when an index is present",
+        "type": "logic"
+    },
+    {
+        "date": "29.10.2022",
+        "dbms": "Neo4j",
+        "link": "https://github.com/neo4j/neo4j/issues/12967",
+        "status": "closed (not a bug)",
+        "test": [],
+        "title": "NoSuchMethodError when using a text index and a starts with clause",
+        "type": "logic"
     }
 ]
