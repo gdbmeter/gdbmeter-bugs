@@ -85,7 +85,7 @@
         "type": "error"
     },
     {
-        "comment": "This is a known issue that peristed over many versions and has been adressed in the newst version.",
+        "comment": "This is a known issue that persisted over many versions and has been addressed in the newst version.",
         "date": "01.05.2022",
         "dbms": "Neo4j",
         "link": "https://github.com/neo4j/neo4j/issues/12876",
@@ -181,10 +181,10 @@
             "MATCH (n:L) WHERE n.p XOR (false XOR n.p OR null) RETURN n"
         ],
         "title": "QueryExecutionException in query planner",
-        "type": "logic"
+        "type": "error"
     },
     {
-        "comment": "Due to an invalid query, RedisGraph tries to allocate too much memory which crashes the database server.",
+        "comment": "Due to a query containing large offsets, RedisGraph tries to allocate too much memory which crashes the database server.",
         "date": "30.05.2022",
         "dbms": "RedisGraph",
         "link": "https://github.com/RedisGraph/RedisGraph/issues/2374",
@@ -196,7 +196,7 @@
         "type": "crash"
     },
     {
-        "comment": "Due to an invalid query, RedisGraph tries to access invalid memory which crashes the database server.",
+        "comment": "Due to a query containing a negative offset, RedisGraph tries to access invalid memory which crashes the database server.",
         "date": "30.05.2022",
         "dbms": "RedisGraph",
         "link": "https://github.com/RedisGraph/RedisGraph/issues/2375",
@@ -270,7 +270,7 @@
         "date": "06.06.2022",
         "dbms": "RedisGraph",
         "link": "https://github.com/RedisGraph/RedisGraph/issues/2387",
-        "status": "fixed (in documentation)",
+        "status": "fixed",
         "test": [
             "GRAPH.QUERY db 'RETURN toJSON(point({ longitude: 167.697555, latitude: 0.402313 }))'"
         ],
@@ -317,7 +317,7 @@
         "type": "crash"
     },
     {
-        "comment": "Calling the substring function with a large third parameter allocates a lot of memory which forces the server to crash.",
+        "comment": "Calling the substring function with a large third parameter allocates a lot of memory which crashes the server.",
         "date": "13.06.2022",
         "dbms": "RedisGraph",
         "link": "https://github.com/RedisGraph/RedisGraph/issues/2406",
@@ -383,7 +383,7 @@
         "type": "crash"
     },
     {
-        "comment": "Negative distances make the redis server hang. This bug is part of multiple projects. In particular, the RedisSearch project which is the indexing backend of RedisGraph.",
+        "comment": "Negative distances make the RedisGraph server hang indefinitely. This bug occurs in all projects using the index backend RedisSearch.",
         "date": "27.06.2022",
         "dbms": "RedisGraph",
         "link": "https://github.com/RedisGraph/RedisGraph/issues/2433",
@@ -446,6 +446,7 @@
         "type": "logic"
     },
     {
+        "comment": "After creating a lucene index, all insert statements produce a PermanentBackendException.",
         "date": "18.07.2022",
         "dbms": "JanusGraph",
         "link": "https://github.com/JanusGraph/janusgraph/issues/3146",
@@ -466,6 +467,7 @@
         "type": "error"
     },
     {
+        "comment": "After creating a mixed lucene index, queries that match on the min or max value of a long fail due to integer overflows.",
         "date": "26.07.2022",
         "dbms": "JanusGraph",
         "link": "https://github.com/JanusGraph/janusgraph/issues/3154",
