@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-"""This script provides functionality to validate, manipulate, and transform the bugs.json file.Taken from
-https://github.com/sqlancer/bugs and adjusted to our needs. """
+"""This script provides functionality to validate, manipulate, and transform the bugs.json file. Taken from
+https://github.com/sqlancer/bugs with consent of the original author and adjusted to our needs. """
 
 import json
 import argparse
@@ -77,13 +77,7 @@ def export_database():
         ORACLE STRING,
         STATUS STRING,
         DATE STRING,
-        TEST STRING,
-        TRIGGER_BUG_LINE STRING,
-        SEVERITY STRING,
-        URL_EMAIL STRING,
-        URL_BUGTRACKER STRING,
-        URL_FIX STRING,
-        REPORTER STRING
+        TEST STRING
     );
     """)
     cursor.execute("""
@@ -106,28 +100,17 @@ def export_database():
     """)
     cursor.execute("""
     CREATE VIEW DBMS_BUGS_STATUS AS
-    SELECT d1.DATABASE, d2.status, (SELECT COUNT(*) FROM DBMS_BUGS d3
-        WHERE d3.DATABASE = d1.DATABASE AND d3.STATUS = d2.STATUS) as count
-        FROM DBMS_BUGS d1, DBMS_BUGS d2 GROUP BY d1.DATABASE, d2.STATUS;
+    SELECT d1.DBMS, d2.status, (SELECT COUNT(*) FROM DBMS_BUGS d3
+        WHERE d3.DBMS = d1.DBMS AND d3.STATUS = d2.STATUS) as count
+        FROM DBMS_BUGS d1, DBMS_BUGS d2 GROUP BY d1.DBMS, d2.STATUS;
     """)
     for bug_entry in parsed_content:
-        severity = bug_entry.get('severity', None)
-        links = bug_entry.get('links', {})
-        cursor.execute("""INSERT INTO DBMS_BUGS (DBMS, ORACLE, STATUS, DATE, TEST,
-            TRIGGER_BUG_LINE, SEVERITY, URL_EMAIL, URL_BUGTRACKER, URL_FIX,
-            REPORTER)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+        cursor.execute("""INSERT INTO DBMS_BUGS (DBMS, STATUS, DATE, TEST)
+            VALUES (?, ?, ?, ?)""",
                        (bug_entry['dbms'],
-                        "Unknown",
                         bug_entry['status'],
                         bug_entry['date'],
-                        '\n'.join(bug_entry['test']),
-                        "empty" if len(bug_entry["test"]) == 0 else bug_entry['test'][-1],
-                        severity,
-                        links.get('email', None),
-                        links.get('bugtracker', None),
-                        links.get('fix', None),
-                        "Reporter"))
+                        '\n'.join(bug_entry['test'])))
         rid = cursor.execute('select last_insert_rowid();').fetchall()[0][0]
         seq = 0
         for statement in bug_entry['test']:

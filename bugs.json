@@ -270,7 +270,7 @@
         "date": "06.06.2022",
         "dbms": "RedisGraph",
         "link": "https://github.com/RedisGraph/RedisGraph/issues/2387",
-        "status": "fixed",
+        "status": "fixed (in documentation)",
         "test": [
             "GRAPH.QUERY db 'RETURN toJSON(point({ longitude: 167.697555, latitude: 0.402313 }))'"
         ],
