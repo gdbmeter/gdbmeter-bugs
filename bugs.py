@@ -3,10 +3,10 @@
 """This script provides functionality to validate, manipulate, and transform the bugs.json file. Taken from
 https://github.com/sqlancer/bugs with consent of the original author and adjusted to our needs. """
 
-import json
 import argparse
-import sys
+import json
 import sqlite3
+import sys
 from jsonschema import validate
 
 parser = argparse.ArgumentParser(prog='bugs.py')
@@ -74,10 +74,12 @@ def export_database():
     CREATE TABLE DBMS_BUGS (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         DBMS STRING,
-        ORACLE STRING,
+        TYPE STRING,
+        COMMENT STRING,
         STATUS STRING,
         DATE STRING,
-        TEST STRING
+        TEST STRING,
+        URL_BUGTRACKER STRING
     );
     """)
     cursor.execute("""
@@ -105,12 +107,15 @@ def export_database():
         FROM DBMS_BUGS d1, DBMS_BUGS d2 GROUP BY d1.DBMS, d2.STATUS;
     """)
     for bug_entry in parsed_content:
-        cursor.execute("""INSERT INTO DBMS_BUGS (DBMS, STATUS, DATE, TEST)
-            VALUES (?, ?, ?, ?)""",
+        cursor.execute("""INSERT INTO DBMS_BUGS (DBMS, TYPE, COMMENT, STATUS, DATE, TEST, URL_BUGTRACKER)
+            VALUES (?, ?, ?, ?, ?, ?, ?)""",
                        (bug_entry['dbms'],
+                        bug_entry['type'],
+                        bug_entry.get('comment', None),
                         bug_entry['status'],
                         bug_entry['date'],
-                        '\n'.join(bug_entry['test'])))
+                        '\n'.join(bug_entry['test']),
+                        bug_entry['link']))
         rid = cursor.execute('select last_insert_rowid();').fetchall()[0][0]
         seq = 0
         for statement in bug_entry['test']:
